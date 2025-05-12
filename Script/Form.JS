@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', function() {
             formData.append('redirect', 'false');
             formData.append('botcheck', '');
 
-            // Attempt to send form data
+            // Send form data to Web3Forms API
             const response = await fetch('https://api.web3forms.com/submit', {
                 method: 'POST',
                 body: formData
