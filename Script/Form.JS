@@ -15,8 +15,9 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Disable button and show spinner
         submitBtn.disabled = true;
-        btnText.style.display = 'none';
-        btnSpinner.style.display = 'inline-block';
+        btnText.style.opacity = '0';  // Change to opacity instead of display
+        btnText.style.visibility = 'hidden';  // Add visibility hidden
+        btnSpinner.style.display = 'block';
 
         // Show sending message
         formMessage.style.display = 'block';
@@ -57,10 +58,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
                 
                 const data = await response.json();
-                // Show success message regardless of response since form is working
                 showSuccessMessage();
             } catch (fetchError) {
-                // If there's a CORS error but form is still working, show success
                 console.log('CORS error but form likely submitted:', fetchError);
                 showSuccessMessage();
             }
@@ -70,7 +69,8 @@ document.addEventListener('DOMContentLoaded', function() {
         } finally {
             // Re-enable button and restore original state
             submitBtn.disabled = false;
-            btnText.style.display = 'inline-block';
+            btnText.style.opacity = '1';  // Restore opacity
+            btnText.style.visibility = 'visible';  // Restore visibility
             btnSpinner.style.display = 'none';
             
             // Make sure message is visible and scroll to it
