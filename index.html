@@ -439,21 +439,25 @@
                 </div>
             </div>
             <div class="contact-form">
-                <form id="contactForm" action="javascript:void(0);">
+                <form id="contactForm" action="javascript:void(0);" novalidate>
+                    <input type="hidden" name="access_key" value="97f37cb7-3f83-4ce0-83b7-16fa58ee9e80">
+                    <input type="hidden" name="subject" value="New Contact Form Submission">
+                    <input type="checkbox" name="botcheck" style="display: none;">
+                    
                     <!-- Name input field -->
                     <div class="form-group">
-                        <label class="form-label">Name</label>
-                        <input type="text" name="name" id="name" class="form-input" required />
+                        <label class="form-label" for="name">Name</label>
+                        <input type="text" name="name" id="name" class="form-input" required minlength="2" />
                     </div>
                     <!-- Email input field -->
                     <div class="form-group">
-                        <label class="form-label">Email</label>
+                        <label class="form-label" for="email">Email</label>
                         <input type="email" name="email" id="email" class="form-input" required />
                     </div>
                     <!-- Message textarea -->
                     <div class="form-group">
-                        <label class="form-label">Message</label>
-                        <textarea name="message" id="message" class="form-textarea" required></textarea>
+                        <label class="form-label" for="message">Message</label>
+                        <textarea name="message" id="message" class="form-textarea" required minlength="10"></textarea>
                     </div>
                     <!-- Submit button -->
                     <button type="submit" class="btn btn-primary" id="submitBtn">

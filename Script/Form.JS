@@ -32,15 +32,22 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
 
         try {
-            // Create form data object
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const message = document.getElementById('message').value;
+
+            // Create form data object with all required fields
             const formData = {
                 access_key: '97f37cb7-3f83-4ce0-83b7-16fa58ee9e80',
-                name: document.getElementById('name').value,
-                email: document.getElementById('email').value,
-                message: document.getElementById('message').value,
-                subject: 'New Contact Form Submission - Portfolio',
-                from_name: document.getElementById('name').value
+                from_name: name,
+                name: name,
+                email: email,
+                message: message,
+                subject: `Portfolio Contact: ${name}`,
+                botcheck: '',
             };
+
+            console.log('Sending form data:', formData); // Debug log
 
             // Send the form data
             const response = await fetch('https://api.web3forms.com/submit', {
@@ -53,15 +60,18 @@ document.addEventListener('DOMContentLoaded', function() {
             });
 
             const data = await response.json();
+            console.log('Response:', data); // Debug log
             
             if (data.success) {
                 showSuccessMessage();
+                // Optional: Send a copy to your email using mailto
+                window.open(`mailto:dhurvrath@gmail.com?subject=Portfolio Contact: ${name}&body=Name: ${name}%0D%0AEmail: ${email}%0D%0AMessage: ${message}`);
             } else {
-                throw new Error('Form submission failed');
+                throw new Error(data.message || 'Form submission failed');
             }
         } catch (error) {
             console.error('Error:', error);
-            showErrorMessage();
+            showErrorMessage(error.message);
         } finally {
             // Re-enable button and restore original state
             submitBtn.disabled = false;
@@ -88,13 +98,13 @@ document.addEventListener('DOMContentLoaded', function() {
         form.reset();
     }
 
-    function showErrorMessage() {
+    function showErrorMessage(errorMsg = '') {
         formMessage.innerHTML = `
             <div class="error-message">
                 <div class="message-icon">❌</div>
                 <div class="message-text">
                     <h4>Failed to send your message</h4>
-                    <p>Please try again later or reach us at dhurvrath@gmail.com</p>
+                    <p>${errorMsg || 'Please try again later or reach us at dhurvrath@gmail.com'}</p>
                 </div>
             </div>
         `;
