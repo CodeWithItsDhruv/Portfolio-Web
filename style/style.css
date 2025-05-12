@@ -910,56 +910,65 @@ body {
 }
 
 .form-message {
-    margin-top: 20px;
+    margin-top: 1.5rem;
+    padding: 1rem;
+    border-radius: 0.75rem;
     display: none;
 }
 
-.form-message .success-message,
-.form-message .error-message,
-.form-message .info-message {
-    padding: 15px;
-    border-radius: 5px;
+.info-message,
+.success-message,
+.error-message {
+    padding: 1rem;
+    border-radius: 0.75rem;
     display: flex;
-    align-items: flex-start;
-    gap: 15px;
-    margin-top: 20px;
+    align-items: center;
+    gap: 1rem;
+    animation: slideIn 0.3s ease-out;
 }
 
-.form-message .success-message {
-    background-color: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
+.info-message {
+    background: var(--surface-primary);
+    color: var(--text-primary);
+    border: 1px solid var(--surface-secondary);
 }
 
-.form-message .error-message {
-    background-color: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
+.success-message {
+    background: rgba(50, 215, 75, 0.1);
+    border: 1px solid var(--success);
+    color: var(--success);
 }
 
-.form-message .info-message {
-    background-color: #cce5ff;
-    color: #004085;
-    border: 1px solid #b8daff;
+.error-message {
+    background: rgba(255, 69, 58, 0.1);
+    border: 1px solid var(--error);
+    color: var(--error);
 }
 
-.form-message .message-icon {
-    font-size: 24px;
-    line-height: 1;
+.message-icon {
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    flex-shrink: 0;
 }
 
-.form-message .message-text {
+.message-text {
     flex: 1;
 }
 
-.form-message .message-text h4 {
-    margin: 0 0 10px 0;
+.message-text h4 {
+    margin-bottom: 0.25rem;
     font-size: 1.1rem;
+    font-weight: 600;
 }
 
-.form-message .message-text p {
+.message-text p {
     margin: 0;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
+    opacity: 0.9;
 }
 
 /* Form Submit Button */

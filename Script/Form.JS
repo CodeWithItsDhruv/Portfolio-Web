@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (!form || !formMessage) return;
 
     form.addEventListener('submit', async function (e) {
-        e.preventDefault();
+        e.preventDefault(); // Prevent form from submitting normally
 
         // Get the submit button and show loading state
         const submitBtn = document.getElementById('submitBtn');
@@ -32,25 +32,25 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
 
         try {
-            // Create form data object
+            // Get form data
             const formData = {
                 name: document.getElementById('name').value,
                 email: document.getElementById('email').value,
                 message: document.getElementById('message').value
             };
 
-            // Submit form using our serverless function
-            const response = await fetch('/api/submit-form', {
+            // Send to our API endpoint
+            const response = await fetch('/api/contact', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
                 },
                 body: JSON.stringify(formData)
             });
-
+            
             if (!response.ok) {
-                const data = await response.json();
-                throw new Error(data.error || 'Failed to submit form');
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
             
             const data = await response.json();
@@ -59,51 +59,45 @@ document.addEventListener('DOMContentLoaded', function() {
                 showSuccessMessage();
                 form.reset();
             } else {
-                throw new Error(data.message || 'Form submission failed');
+                throw new Error('Form submission failed');
             }
         } catch (error) {
             console.error('Error:', error);
-            const errorMessage = error.message.includes('Failed to fetch') 
-                ? 'Network error. Please check your internet connection and try again.'
-                : error.message;
-            showErrorMessage(errorMessage);
+            showErrorMessage();
         } finally {
-            // Re-enable button and restore original state after a delay
-            setTimeout(() => {
-                submitBtn.disabled = false;
-                btnText.style.opacity = '1';
-                btnText.style.visibility = 'visible';
-                btnSpinner.style.display = 'none';
-            }, 1000);
+            // Re-enable button and restore original state
+            submitBtn.disabled = false;
+            btnText.style.opacity = '1';
+            btnText.style.visibility = 'visible';
+            btnSpinner.style.display = 'none';
+            
+            // Make sure message is visible and scroll to it
+            formMessage.style.display = 'block';
+            formMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
     });
 
     function showSuccessMessage() {
         formMessage.innerHTML = `
-            <div class="success-message" style="display: block; background-color: #d4edda; color: #155724; padding: 15px; border-radius: 5px; margin-top: 20px;">
-                <div class="message-icon" style="font-size: 24px;">✅</div>
+            <div class="success-message">
+                <div class="message-icon">✅</div>
                 <div class="message-text">
-                    <h4 style="margin: 0 0 10px 0;">Message Sent Successfully!</h4>
-                    <p style="margin: 0;">Thank you for reaching out. I'll get back to you soon.</p>
+                    <h4>Message Sent Successfully!</h4>
+                    <p>Thank you for reaching out. I'll get back to you soon.</p>
                 </div>
             </div>
         `;
-        formMessage.style.display = 'block';
-        formMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
-    function showErrorMessage(errorMessage) {
+    function showErrorMessage() {
         formMessage.innerHTML = `
-            <div class="error-message" style="display: block; background-color: #f8d7da; color: #721c24; padding: 15px; border-radius: 5px; margin-top: 20px;">
-                <div class="message-icon" style="font-size: 24px;">❌</div>
+            <div class="error-message">
+                <div class="message-icon">❌</div>
                 <div class="message-text">
-                    <h4 style="margin: 0 0 10px 0;">Failed to send your message</h4>
-                    <p style="margin: 0;">Please try again later or reach us at dhurvrath@gmail.com</p>
-                    <p style="margin: 10px 0 0 0; font-size: 0.9em; color: #721c24;">Error: ${errorMessage}</p>
+                    <h4>Failed to send your message</h4>
+                    <p>Please try again later or reach us at dhurvrath@gmail.com</p>
                 </div>
             </div>
         `;
-        formMessage.style.display = 'block';
-        formMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 });
