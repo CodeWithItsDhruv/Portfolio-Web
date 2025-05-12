@@ -41,21 +41,36 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
             
-            // Prepare form data
-            const formData = new FormData(form);
-            formData.append('redirect', 'false'); // Prevent redirection
+            // Create JSON data instead of FormData
+            const jsonData = {
+                access_key: '97f37cb7-3f83-4ce0-83b7-16fa58ee9e80',
+                name: name,
+                email: email,
+                message: message,
+                subject: 'New Contact Form Submission',
+                from_name: 'Portfolio Website Contact Form'
+            };
             
             // Send form data to Web3Forms
             fetch('https://api.web3forms.com/submit', {
                 method: 'POST',
-                body: formData
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(jsonData)
             })
-            .then(response => response.json())
+            .then(async response => {
+                const data = await response.json();
+                if (response.ok) {
+                    return data;
+                }
+                throw new Error(data.message || 'Form submission failed');
+            })
             .then(data => {
                 if (data.success) {
                     showFormMessage('Thank you! Your message has been sent successfully.', 'success');
                     form.reset();
-                    // Scroll the success message into view
                     formMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                 } else {
                     throw new Error(data.message || 'Form submission failed');
@@ -90,7 +105,7 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
         formMessage.style.display = 'block';
         
-        // Only auto-hide error messages, keep success messages visible
+        // Only auto-hide error messages after 5 seconds
         if (type === 'error') {
             setTimeout(() => {
                 formMessage.style.display = 'none';
