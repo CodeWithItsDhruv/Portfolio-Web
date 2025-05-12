@@ -1,0 +1,13 @@
+{
+    "name": "portfolio-web",
+    "version": "1.0.0",
+    "description": "Portfolio website with contact form",
+    "main": "index.js",
+    "scripts": {
+        "start": "vercel dev"
+    },
+    "dependencies": {
+        "form-data": "^4.0.0",
+        "node-fetch": "^3.3.2"
+    }
+} 
