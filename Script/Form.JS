@@ -32,26 +32,26 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
 
         try {
-            // Get form data
-            const formData = {
-                name: document.getElementById('name').value,
-                email: document.getElementById('email').value,
-                message: document.getElementById('message').value
-            };
-
-            // Send to our API endpoint
-            const response = await fetch('/api/contact', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify(formData)
-            });
+            // Create FormData object
+            const formData = new FormData();
             
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
+            // Add form field values
+            formData.append('name', document.getElementById('name').value);
+            formData.append('email', document.getElementById('email').value);
+            formData.append('message', document.getElementById('message').value);
+            
+            // Add required web3forms fields
+            formData.append('access_key', '97f37cb7-3f83-4ce0-83b7-16fa58ee9e80');
+            formData.append('subject', 'New Contact Form Submission - Portfolio');
+            formData.append('from_name', document.getElementById('name').value);
+            formData.append('redirect', 'false');
+            formData.append('botcheck', '');
+
+            // Attempt to send form data
+            const response = await fetch('https://api.web3forms.com/submit', {
+                method: 'POST',
+                body: formData
+            });
             
             const data = await response.json();
             

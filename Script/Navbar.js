@@ -98,28 +98,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
-
-    // Intersection Observer for fade-in animations
-    const sectionObserverOptions = {
-        threshold: 0.2,
-    };
-
-    const sectionObserver = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-                entry.target.style.opacity = "1";
-                entry.target.style.transform = "translateY(0)";
-            }
-        });
-    }, sectionObserverOptions);
-
-    // Observe all sections except hero
-    document.querySelectorAll("section:not(.hero)").forEach((section) => {
-        section.style.opacity = "0";
-        section.style.transform = "translateY(20px)";
-        section.style.transition = "all 0.6s ease-out";
-        sectionObserver.observe(section);
-    });
 });
 
 // Ensure the page scrolls to the top on refresh
@@ -135,3 +113,25 @@ window.onload = function () {
         history.replaceState("", document.title, window.location.pathname + window.location.search);
     }
 }
+
+// Intersection Observer for fade-in animations
+const observerOptions = {
+    threshold: 0.2,
+};
+
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+            entry.target.style.opacity = "1";
+            entry.target.style.transform = "translateY(0)";
+        }
+    });
+}, observerOptions);
+
+// Observe all sections except hero
+document.querySelectorAll("section:not(.hero)").forEach((section) => {
+    section.style.opacity = "0";
+    section.style.transform = "translateY(20px)";
+    section.style.transition = "all 0.6s ease-out";
+    observer.observe(section);
+});
