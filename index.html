@@ -441,7 +441,8 @@
                 </div>
             </div>
             <div class="contact-form">
-                <form id="contactForm" action="javascript:void(0);" novalidate>
+                <form id="contactForm" action="https://api.web3forms.com/submit" method="POST" novalidate>
+                    <!-- Web3Forms requires an access key -->
                     <input type="hidden" name="access_key" value="97f37cb7-3f83-4ce0-83b7-16fa58ee9e80">
                     <input type="hidden" name="subject" value="New Contact Form Submission">
                     <input type="checkbox" name="botcheck" style="display: none;">
@@ -461,6 +462,9 @@
                         <label class="form-label" for="message">Message</label>
                         <textarea name="message" id="message" class="form-textarea" required minlength="10"></textarea>
                     </div>
+                    <!-- Add a redirect URL after form submission -->
+                    <input type="hidden" name="redirect" value="https://www.nextwithdhruv.tech">
+                    
                     <!-- Submit button -->
                     <button type="submit" class="btn btn-primary" id="submitBtn">
                         <span>Send Message</span>
