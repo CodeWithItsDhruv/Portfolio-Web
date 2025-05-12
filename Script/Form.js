@@ -6,8 +6,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const submitBtn = document.getElementById('submitBtn');
     
     if (form) {
-        form.addEventListener('submit', function(e) {
+        form.addEventListener('submit', async function(e) {
             e.preventDefault();
+            
+            // Disable the button immediately
+            submitBtn.disabled = true;
             
             // Show loading spinner
             const spinner = submitBtn.querySelector('.spinner');
@@ -15,7 +18,6 @@ document.addEventListener('DOMContentLoaded', function() {
             
             btnText.style.display = 'none';
             spinner.style.display = 'inline-block';
-            submitBtn.disabled = true;
             
             // Form validation
             const name = document.getElementById('name').value.trim();
@@ -41,19 +43,24 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
             
-            // Prepare form data
-            const formData = new FormData(form);
-            formData.append('redirect', 'false'); // Prevent redirection
-            
-            // Send form data to Web3Forms
-            fetch('https://api.web3forms.com/submit', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
+            try {
+                // Prepare form data
+                const formData = new FormData(form);
+                formData.append('redirect', 'false');
+
+                // Send form data to Web3Forms
+                const response = await fetch('https://api.web3forms.com/submit', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json'
+                    },
+                    body: formData
+                });
+
+                const data = await response.json();
+
                 if (data.success) {
-                    // Add success message styles directly
+                    // Show success message
                     formMessage.style.cssText = `
                         display: block;
                         margin-top: 20px;
@@ -62,6 +69,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         border: 1px solid #c3e6cb;
                         border-radius: 8px;
                         color: #155724;
+                        position: relative;
+                        z-index: 1000;
                     `;
                     
                     formMessage.innerHTML = `
@@ -74,19 +83,26 @@ document.addEventListener('DOMContentLoaded', function() {
                         </div>
                     `;
                     
+                    // Reset form
                     form.reset();
+                    
+                    // Ensure message is visible
                     formMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    
+                    // Keep success message visible for 5 seconds
+                    setTimeout(() => {
+                        formMessage.style.display = 'none';
+                    }, 5000);
                 } else {
                     throw new Error(data.message || 'Form submission failed');
                 }
-            })
-            .catch(error => {
+            } catch (error) {
                 console.error('Form submission error:', error);
                 showFormMessage('Oops! There was a problem submitting your form. Please try again.', 'error');
-            })
-            .finally(() => {
+            } finally {
+                // Always reset button state after submission attempt
                 resetButton();
-            });
+            }
         });
     }
     
@@ -98,7 +114,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Helper function to show form message
     function showFormMessage(text, type) {
-        // Add error message styles directly
         formMessage.style.cssText = `
             display: block;
             margin-top: 20px;
@@ -107,6 +122,8 @@ document.addEventListener('DOMContentLoaded', function() {
             border: 1px solid ${type === 'error' ? '#f5c6cb' : '#c3e6cb'};
             border-radius: 8px;
             color: ${type === 'error' ? '#721c24' : '#155724'};
+            position: relative;
+            z-index: 1000;
         `;
         
         formMessage.innerHTML = `
@@ -119,12 +136,10 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
         `;
         
-        // Only auto-hide error messages
-        if (type === 'error') {
-            setTimeout(() => {
-                formMessage.style.display = 'none';
-            }, 5000);
-        }
+        // Auto-hide messages after 5 seconds
+        setTimeout(() => {
+            formMessage.style.display = 'none';
+        }, 5000);
     }
     
     // Helper function to reset button state
