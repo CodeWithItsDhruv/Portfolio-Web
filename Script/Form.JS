@@ -53,9 +53,28 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    showFormMessage('Thank you! Your message has been sent successfully.', 'success');
+                    // Add success message styles directly
+                    formMessage.style.cssText = `
+                        display: block;
+                        margin-top: 20px;
+                        padding: 15px;
+                        background-color: #d4edda;
+                        border: 1px solid #c3e6cb;
+                        border-radius: 8px;
+                        color: #155724;
+                    `;
+                    
+                    formMessage.innerHTML = `
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <div style="font-size: 24px;">✅</div>
+                            <div>
+                                <h4 style="margin: 0 0 5px 0; font-weight: 600;">Success!</h4>
+                                <p style="margin: 0;">Thank you! Your message has been sent successfully.</p>
+                            </div>
+                        </div>
+                    `;
+                    
                     form.reset();
-                    // Scroll the success message into view
                     formMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                 } else {
                     throw new Error(data.message || 'Form submission failed');
@@ -79,18 +98,28 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Helper function to show form message
     function showFormMessage(text, type) {
+        // Add error message styles directly
+        formMessage.style.cssText = `
+            display: block;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: ${type === 'error' ? '#f8d7da' : '#d4edda'};
+            border: 1px solid ${type === 'error' ? '#f5c6cb' : '#c3e6cb'};
+            border-radius: 8px;
+            color: ${type === 'error' ? '#721c24' : '#155724'};
+        `;
+        
         formMessage.innerHTML = `
-            <div class="${type}-message">
-                <div class="message-icon">${type === 'success' ? '✅' : '❌'}</div>
-                <div class="message-text">
-                    <h4>${type === 'success' ? 'Success!' : 'Error!'}</h4>
-                    <p>${text}</p>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="font-size: 24px;">${type === 'error' ? '❌' : '✅'}</div>
+                <div>
+                    <h4 style="margin: 0 0 5px 0; font-weight: 600;">${type === 'error' ? 'Error!' : 'Success!'}</h4>
+                    <p style="margin: 0;">${text}</p>
                 </div>
             </div>
         `;
-        formMessage.style.display = 'block';
         
-        // Only auto-hide error messages, keep success messages visible
+        // Only auto-hide error messages
         if (type === 'error') {
             setTimeout(() => {
                 formMessage.style.display = 'none';
