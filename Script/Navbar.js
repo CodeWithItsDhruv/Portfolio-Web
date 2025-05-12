@@ -115,23 +115,23 @@ window.onload = function () {
 }
 
 // Intersection Observer for fade-in animations
-const observerOptions = {
+const sectionObserverOptions = {
     threshold: 0.2,
 };
 
-const observer = new IntersectionObserver((entries) => {
+const sectionObserver = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
         if (entry.isIntersecting) {
             entry.target.style.opacity = "1";
             entry.target.style.transform = "translateY(0)";
         }
     });
-}, observerOptions);
+}, sectionObserverOptions);
 
 // Observe all sections except hero
 document.querySelectorAll("section:not(.hero)").forEach((section) => {
     section.style.opacity = "0";
     section.style.transform = "translateY(20px)";
     section.style.transition = "all 0.6s ease-out";
-    observer.observe(section);
+    sectionObserver.observe(section);
 });
