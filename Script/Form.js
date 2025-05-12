@@ -52,17 +52,26 @@ document.addEventListener('DOMContentLoaded', function() {
                 const response = await fetch('https://api.web3forms.com/submit', {
                     method: 'POST',
                     headers: {
-                        'Accept': 'application/json'
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/x-www-form-urlencoded'
                     },
-                    body: formData
+                    body: new URLSearchParams(formData)
                 });
 
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
                 const data = await response.json();
+                console.log('Form submission response:', data); // Debug log
 
                 if (data.success) {
+                    // Clear any existing messages
+                    formMessage.innerHTML = '';
+                    
                     // Show success message
                     formMessage.style.cssText = `
-                        display: block;
+                        display: block !important;
                         margin-top: 20px;
                         padding: 15px;
                         background-color: #d4edda;
@@ -71,6 +80,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         color: #155724;
                         position: relative;
                         z-index: 1000;
+                        opacity: 1;
+                        visibility: visible;
                     `;
                     
                     formMessage.innerHTML = `
@@ -114,8 +125,11 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Helper function to show form message
     function showFormMessage(text, type) {
+        // Clear any existing messages first
+        formMessage.innerHTML = '';
+        
         formMessage.style.cssText = `
-            display: block;
+            display: block !important;
             margin-top: 20px;
             padding: 15px;
             background-color: ${type === 'error' ? '#f8d7da' : '#d4edda'};
@@ -124,6 +138,8 @@ document.addEventListener('DOMContentLoaded', function() {
             color: ${type === 'error' ? '#721c24' : '#155724'};
             position: relative;
             z-index: 1000;
+            opacity: 1;
+            visibility: visible;
         `;
         
         formMessage.innerHTML = `
@@ -139,6 +155,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Auto-hide messages after 5 seconds
         setTimeout(() => {
             formMessage.style.display = 'none';
+            formMessage.innerHTML = '';
         }, 5000);
     }
     
