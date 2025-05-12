@@ -64,8 +64,6 @@ document.addEventListener('DOMContentLoaded', function() {
             
             if (data.success) {
                 showSuccessMessage();
-                // Optional: Send a copy to your email using mailto
-                window.open(`mailto:dhurvrath@gmail.com?subject=Portfolio Contact: ${name}&body=Name: ${name}%0D%0AEmail: ${email}%0D%0AMessage: ${message}`);
             } else {
                 throw new Error(data.message || 'Form submission failed');
             }
