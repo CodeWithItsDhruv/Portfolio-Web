@@ -30,17 +30,26 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
             try {
-                // Prepare form data
-                const formData = new FormData(form);
-                formData.append('redirect', 'false');
+                // Create a plain object with form data
+                const formData = {
+                    access_key: '97f37cb7-3f83-4ce0-83b7-16fa58ee9e80',
+                    name: name,
+                    email: email,
+                    message: message,
+                    subject: 'New Contact Form Submission',
+                    from_name: 'Portfolio Contact Form',
+                    botcheck: '',
+                    redirect: false
+                };
 
                 // Send form data to Web3Forms
                 const response = await fetch('https://api.web3forms.com/submit', {
                     method: 'POST',
                     headers: {
+                        'Content-Type': 'application/json',
                         'Accept': 'application/json'
                     },
-                    body: formData
+                    body: JSON.stringify(formData)
                 });
 
                 const data = await response.json();
