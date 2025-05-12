@@ -41,7 +41,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Main stylesheet -->
-    <link rel="stylesheet" href="/style/style.css">
+    <link rel="stylesheet" href="style/style.css">
 
  
 </head>
@@ -437,7 +437,7 @@
                 </div>
             </div>
             <div class="contact-form">
-                <form id="contactForm" action="https://api.web3forms.com/submit" method="POST" novalidate>
+                <form id="contactForm" method="POST" novalidate>
                     <!-- Web3Forms requires an access key -->
                     <input type="hidden" name="access_key" value="97f37cb7-3f83-4ce0-83b7-16fa58ee9e80">
                     <input type="hidden" name="subject" value="New Contact Form Submission">
@@ -458,8 +458,6 @@
                         <label class="form-label" for="message">Message</label>
                         <textarea name="message" id="message" class="form-textarea" required minlength="10"></textarea>
                     </div>
-                    <!-- Add a redirect URL after form submission -->
-                    <input type="hidden" name="redirect" value="https://www.nextwithdhruv.tech">
                     
                     <!-- Submit button -->
                     <button type="submit" class="btn btn-primary" id="submitBtn">
@@ -483,10 +481,11 @@
     <footer>
         <p>&copy; 2025 Dhruv Rathod. All rights reserved.</p>
     </footer>
-</body>
-<script src="/Script/main.js" defer></script>
-<script src="/Script/Navbar.js" defer></script>
-<script src="/Script/Form.js" defer></script>
-<script src="/Script/theme.js" defer></script>
 
+    <!-- JavaScript Files -->
+    <script src="Script/main.js" defer></script>
+    <script src="Script/Navbar.js" defer></script>
+    <script src="Script/Form.js" defer></script>
+    <script src="Script/theme.js" defer></script>
+</body>
 </html>

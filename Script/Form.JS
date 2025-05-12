@@ -43,31 +43,27 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Prepare form data
             const formData = new FormData(form);
-            
-            // Convert to URL-encoded string for Web3Forms
-            const encodedData = new URLSearchParams(formData).toString();
+            formData.append('redirect', 'false'); // Prevent redirection
             
             // Send form data to Web3Forms
             fetch('https://api.web3forms.com/submit', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: encodedData
+                body: formData
             })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    form.reset();
                     showFormMessage('Thank you! Your message has been sent successfully.', 'success');
+                    form.reset();
+                    // Scroll the success message into view
+                    formMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                 } else {
-                    showFormMessage('Oops! There was a problem submitting your form. Please try again.', 'error');
-                    console.error('Form submission error:', data);
+                    throw new Error(data.message || 'Form submission failed');
                 }
             })
             .catch(error => {
-                showFormMessage('Oops! There was a problem submitting your form. Please try again.', 'error');
                 console.error('Form submission error:', error);
+                showFormMessage('Oops! There was a problem submitting your form. Please try again.', 'error');
             })
             .finally(() => {
                 resetButton();
@@ -83,15 +79,23 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Helper function to show form message
     function showFormMessage(text, type) {
-        formMessage.textContent = text;
-        formMessage.className = 'form-message';
-        formMessage.classList.add(type);
+        formMessage.innerHTML = `
+            <div class="${type}-message">
+                <div class="message-icon">${type === 'success' ? '✅' : '❌'}</div>
+                <div class="message-text">
+                    <h4>${type === 'success' ? 'Success!' : 'Error!'}</h4>
+                    <p>${text}</p>
+                </div>
+            </div>
+        `;
         formMessage.style.display = 'block';
         
-        // Hide the message after 5 seconds
-        setTimeout(() => {
-            formMessage.style.display = 'none';
-        }, 5000);
+        // Only auto-hide error messages, keep success messages visible
+        if (type === 'error') {
+            setTimeout(() => {
+                formMessage.style.display = 'none';
+            }, 5000);
+        }
     }
     
     // Helper function to reset button state
