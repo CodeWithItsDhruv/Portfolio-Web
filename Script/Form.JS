@@ -47,11 +47,18 @@ document.addEventListener('DOMContentLoaded', function() {
             formData.append('redirect', 'false');
             formData.append('botcheck', '');
 
-            // Attempt to send form data
+            // Attempt to send form data with proper headers
             const response = await fetch('https://api.web3forms.com/submit', {
                 method: 'POST',
+                headers: {
+                    'Accept': 'application/json'
+                },
                 body: formData
             });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
             
             const data = await response.json();
             
