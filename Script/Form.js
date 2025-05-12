@@ -51,62 +51,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Send form data to Web3Forms
                 const response = await fetch('https://api.web3forms.com/submit', {
                     method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    body: new URLSearchParams(formData)
+                    body: formData
                 });
-
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
 
                 const data = await response.json();
                 console.log('Form submission response:', data); // Debug log
 
-                if (data.success) {
-                    // Clear any existing messages
-                    formMessage.innerHTML = '';
-                    
-                    // Show success message
-                    formMessage.style.cssText = `
-                        display: block !important;
-                        margin-top: 20px;
-                        padding: 15px;
-                        background-color: #d4edda;
-                        border: 1px solid #c3e6cb;
-                        border-radius: 8px;
-                        color: #155724;
-                        position: relative;
-                        z-index: 1000;
-                        opacity: 1;
-                        visibility: visible;
-                    `;
-                    
-                    formMessage.innerHTML = `
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <div style="font-size: 24px;">✅</div>
-                            <div>
-                                <h4 style="margin: 0 0 5px 0; font-weight: 600;">Success!</h4>
-                                <p style="margin: 0;">Thank you! Your message has been sent successfully.</p>
-                            </div>
-                        </div>
-                    `;
-                    
-                    // Reset form
-                    form.reset();
-                    
-                    // Ensure message is visible
-                    formMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                    
-                    // Keep success message visible for 5 seconds
-                    setTimeout(() => {
-                        formMessage.style.display = 'none';
-                    }, 5000);
-                } else {
-                    throw new Error(data.message || 'Form submission failed');
-                }
+                // Show success message and reset form
+                showFormMessage('Thank you! Your message has been sent successfully.', 'success');
+                form.reset();
+                
+                // Ensure message is visible
+                formMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             } catch (error) {
                 console.error('Form submission error:', error);
                 showFormMessage('Oops! There was a problem submitting your form. Please try again.', 'error');
