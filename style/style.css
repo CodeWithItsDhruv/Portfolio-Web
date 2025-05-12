@@ -227,10 +227,10 @@ body {
     cursor: pointer;
     font-size: 1rem;
     font-weight: 500;
-    display: inline-flex;
+    display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
+    gap: 10px;
     position: relative;
     overflow: hidden;
     transition: all 0.3s ease;
@@ -239,11 +239,9 @@ body {
 }
 
 .btn span {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
+    display: inline-block;
+    margin: 0;
+    line-height: 1;
 }
 
 .btn::before {
@@ -1013,23 +1011,18 @@ body {
 }
 
 .spinner {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
+    display: none;
     width: 20px;
     height: 20px;
-    border: 2px solid var(--text-primary);
-    border-top: 2px solid transparent;
+    border: 2px solid rgba(255, 255, 255, 0.3);
     border-radius: 50%;
-    animation: spin 1s linear infinite;
-    display: none;
-    z-index: 1;
+    border-top-color: #fff;
+    animation: spin 1s ease-in-out infinite;
+    position: absolute;
 }
 
 @keyframes spin {
-    0% { transform: translate(-50%, -50%) rotate(0deg); }
-    100% { transform: translate(-50%, -50%) rotate(360deg); }
+    to { transform: rotate(360deg); }
 }
 
 /* Light theme adjustments for submit button */

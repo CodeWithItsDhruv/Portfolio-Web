@@ -4,6 +4,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('contactForm');
     const submitBtn = document.getElementById('submitBtn');
     
+    // Add styles to ensure button content stays centered
+    submitBtn.style.cssText = `
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    `;
+    
     if (form) {
         form.addEventListener('submit', async function(e) {
             e.preventDefault();
@@ -78,8 +86,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const spinner = submitBtn.querySelector('.spinner');
         const btnText = submitBtn.querySelector('span');
         
-        btnText.style.display = 'inline-block';
         spinner.style.display = 'none';
+        btnText.style.cssText = `
+            display: inline-block;
+            margin: 0;
+            line-height: 1;
+        `;
         submitBtn.disabled = false;
     }
 });
