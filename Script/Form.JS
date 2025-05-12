@@ -36,28 +36,24 @@ document.addEventListener('DOMContentLoaded', function() {
             const formData = {
                 name: document.getElementById('name').value,
                 email: document.getElementById('email').value,
-                message: document.getElementById('message').value,
-                access_key: '97f37cb7-3f83-4ce0-83b7-16fa58ee9e80',
-                subject: 'New Contact Form Submission - Portfolio',
-                from_name: document.getElementById('name').value
+                message: document.getElementById('message').value
             };
 
-            // Attempt to send form data
-            const response = await fetch('https://api.web3forms.com/submit', {
+            // Submit form using our serverless function
+            const response = await fetch('/api/submit-form', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(formData)
             });
 
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                const data = await response.json();
+                throw new Error(data.error || 'Failed to submit form');
             }
             
             const data = await response.json();
-            console.log('Form submission response:', data);
             
             if (data.success) {
                 showSuccessMessage();
@@ -67,7 +63,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         } catch (error) {
             console.error('Error:', error);
-            // Use a more user-friendly error message
             const errorMessage = error.message.includes('Failed to fetch') 
                 ? 'Network error. Please check your internet connection and try again.'
                 : error.message;
