@@ -15,8 +15,8 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Disable button and show spinner
         submitBtn.disabled = true;
-        btnText.style.opacity = '0';  // Change to opacity instead of display
-        btnText.style.visibility = 'hidden';  // Add visibility hidden
+        btnText.style.opacity = '0';
+        btnText.style.visibility = 'hidden';
         btnSpinner.style.display = 'block';
 
         // Show sending message
@@ -32,36 +32,32 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
 
         try {
-            // Create FormData object
-            const formData = new FormData();
-            
-            // Add form field values
-            formData.append('name', document.getElementById('name').value);
-            formData.append('email', document.getElementById('email').value);
-            formData.append('message', document.getElementById('message').value);
-            
-            // Add required web3forms fields
-            formData.append('access_key', '97f37cb7-3f83-4ce0-83b7-16fa58ee9e80');
-            formData.append('subject', 'New Contact Form Submission - Portfolio');
-            formData.append('from_name', document.getElementById('name').value);
-            formData.append('redirect', 'false');
-            formData.append('botcheck', '');
+            // Create form data object
+            const formData = {
+                access_key: '97f37cb7-3f83-4ce0-83b7-16fa58ee9e80',
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                message: document.getElementById('message').value,
+                subject: 'New Contact Form Submission - Portfolio',
+                from_name: document.getElementById('name').value
+            };
 
-            try {
-                // Attempt to send form data
-                const response = await fetch('https://api.web3forms.com/submit', {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'Accept': 'application/json'
-                    }
-                });
-                
-                const data = await response.json();
+            // Send the form data
+            const response = await fetch('https://api.web3forms.com/submit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+
+            const data = await response.json();
+            
+            if (data.success) {
                 showSuccessMessage();
-            } catch (fetchError) {
-                console.log('CORS error but form likely submitted:', fetchError);
-                showSuccessMessage();
+            } else {
+                throw new Error('Form submission failed');
             }
         } catch (error) {
             console.error('Error:', error);
@@ -69,8 +65,8 @@ document.addEventListener('DOMContentLoaded', function() {
         } finally {
             // Re-enable button and restore original state
             submitBtn.disabled = false;
-            btnText.style.opacity = '1';  // Restore opacity
-            btnText.style.visibility = 'visible';  // Restore visibility
+            btnText.style.opacity = '1';
+            btnText.style.visibility = 'visible';
             btnSpinner.style.display = 'none';
             
             // Make sure message is visible and scroll to it
